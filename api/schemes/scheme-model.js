@@ -176,6 +176,11 @@ function add(scheme) {
   /*
     1D- This function creates a new scheme and resolves to _the newly created scheme_.
   */
+ return db('schemes')
+ .insert(scheme)
+ .then(([id]) => {
+    return findById(id)
+ })
 }
 
 function addStep(scheme_id, step) {
