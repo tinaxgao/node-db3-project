@@ -176,11 +176,11 @@ function add(scheme) {
   /*
     1D- This function creates a new scheme and resolves to _the newly created scheme_.
   */
- return db('schemes')
- .insert(scheme)
- .then(([id]) => {
-    return findById(id)
- })
+  return db("schemes")
+    .insert(scheme)
+    .then(([id]) => {
+      return findById(id);
+    });
 }
 
 function addStep(scheme_id, step) {
@@ -190,13 +190,14 @@ function addStep(scheme_id, step) {
     and resolves to _all the steps_ belonging to the given `scheme_id`,
     including the newly created one.
   */
- return db('steps').insert({
-   ...step,
-   scheme_id
- })
- .then(() => {
-   return findSteps(scheme_id)}
- )
+  return db("steps")
+    .insert({
+      ...step,
+      scheme_id,
+    })
+    .then(() => {
+      return findSteps(scheme_id);
+    });
 }
 
 module.exports = {
