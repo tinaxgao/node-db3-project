@@ -22,7 +22,8 @@ async function find() {
     .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
     .groupBy("sc.scheme_id")
     .select("sc.*")
-    .count("st.step_id as number_of_steps");
+    .count("st.step_id as number_of_steps")
+    .orderBy("sc.scheme_id", "asc");
 
   console.log(rows);
 
@@ -104,16 +105,23 @@ async function findById(scheme_id) {
 
   console.log(rows);
 
-  const result = { steps: [] };
-  result.scheme_id = rows[0].scheme_id;
-  result.scheme_name = rows[0].scheme_name;
+  const result = {
+    scheme_id: parseInt(scheme_id),
+    scheme_name: rows[0].scheme_name,
+    steps: [],
+  };
 
-  rows.map((row) => { //or forEach
-    result.steps.push({
-      step_id: row.step_id,
-      step_number: row.step_number,
-      instructions: row.instructions,
-    });
+  rows.forEach((row) => {
+    //forEach or map?
+    if (!row.step_id) {
+      return result;
+    } else {
+      result.steps.push({
+        step_id: row.step_id,
+        step_number: row.step_number,
+        instructions: row.instructions,
+      });
+    }
   });
 
   return result;
