@@ -27,7 +27,13 @@ const checkSchemeId = async (req, res, next) => {
     "message": "invalid scheme_name"
   }
 */
-const validateScheme = (req, res, next) => {};
+const validateScheme = async (req, res, next) => {
+  if (!req.body.scheme_name || !req.body.scheme_name.trim()) {
+    next({ status: 400, message: "invalid scheme_name" });
+  } else {
+    req.body.scheme_name = req.body.scheme_name.trim();
+  }
+};
 
 /*
   If `instructions` is missing, empty string or not a string, or
@@ -38,7 +44,13 @@ const validateScheme = (req, res, next) => {};
     "message": "invalid step"
   }
 */
-const validateStep = (req, res, next) => {};
+const validateStep = (req, res, next) => {
+  if (!req.body.instructions || !req.body.instructions.trim() || isNaN(req.body.step_number) || req.body.step_number < 1) {
+    next({ status: 400, message: "invalid step" });
+  } else {
+    next()
+  }
+};
 
 module.exports = {
   checkSchemeId,
