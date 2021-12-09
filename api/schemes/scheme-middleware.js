@@ -8,14 +8,20 @@ const db = require("../../data/db-config");
   }
 */
 const checkSchemeId = async (req, res, next) => {
-  const scheme = await db("schemes").where("scheme_id", req.params.id).first();
-  if (scheme) {
-    next();
-  } else {
-    next({
-      status: 404,
-      message: `scheme with scheme_id ${req.params.id} not found`,
-    });
+  try {
+    const scheme = await db("schemes")
+      .where("scheme_id", req.params.scheme_id)
+      .first();
+    if (scheme) {
+      next();
+    } else {
+      next({
+        status: 404,
+        message: `scheme with scheme_id ${req.params.id} not found`,
+      });
+    }
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -45,10 +51,15 @@ const validateScheme = async (req, res, next) => {
   }
 */
 const validateStep = (req, res, next) => {
-  if (!req.body.instructions || !req.body.instructions.trim() || isNaN(req.body.step_number) || req.body.step_number < 1) {
+  if (
+    !req.body.instructions ||
+    !req.body.instructions.trim() ||
+    isNaN(req.body.step_number) ||
+    req.body.step_number < 1
+  ) {
     next({ status: 400, message: "invalid step" });
   } else {
-    next()
+    next();
   }
 };
 
