@@ -100,10 +100,23 @@ async function findById(scheme_id) {
     .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
     .select("sc.scheme_name", "st.*")
     .where("sc.scheme_id", scheme_id)
-    .orderBy("st.step_number", "asc")
+    .orderBy("st.step_number", "asc");
 
-    console.log(rows)
-    return rows
+  console.log(rows);
+
+  const result = { steps: [] };
+  result.scheme_id = rows[0].scheme_id;
+  result.scheme_name = rows[0].scheme_name;
+
+  rows.map((row) => { //or forEach
+    result.steps.push({
+      step_id: row.step_id,
+      step_number: row.step_number,
+      instructions: row.instructions,
+    });
+  });
+
+  return result;
 }
 
 function findSteps(scheme_id) {
